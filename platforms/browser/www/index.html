@@ -1,69 +1,136 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black">
-    <title>My App</title>
-    <!-- We will include related CSS styles using JavaScript -->
-  </head>
-  <body>
-    <div class="statusbar-overlay"></div>
-    <div class="panel-overlay"></div>
-    <div class="panel panel-left panel-reveal">
-      <div class="content-block">
-        <h1>RandoBreizh</h1>
-        <p>Connectez-vous pour accéder aux fonctionnalités avancées</p>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+        <title>Blank App</title>
+        <link rel="stylesheet" href="css/app.css" type="text/css" charset="utf-8">
+    </head>
+    <body>
+
+      <div id="main-menu" class="menu menu-left">
+        <h2>Menu Left</h2>
+        <ul>
+          <li><a href="#">Item 1</a></li>
+          <li><a href="#">Item 2</a></li>
+        </ul>
       </div>
-    </div>
-    <div class="views">
-      <!--
-      We use Through-type Navbar layout for dynamic navbar.
-      So we keep Navbar as the child of View, and have "navbar-through" class on View
-      -->
-      <div class="view view-main navbar-through">
-        <div class="navbar">
-          <div class="navbar-inner">
-            <div class="left">
-              <a href="#" class="link icon-only open-panel"> <i class="icon icon-bars"></i></a>
+
+      <div id="settings-menu" class="menu menu-right">
+        <h2>Paramètres</h2>
+        <ul>
+          <li><a href="#">Paramètre 1</a></li>
+          <li><a href="#">Paramètre 2</a></li>
+        </ul>
+      </div>
+
+      <div id="page" class="container-fluid">
+        <header class="bar row">
+          <button class="btn bar-left"><span class="glyphicon glyphicon-menu-hamburger"></span></button>
+          <h1 class="bar-title">Ldw App</h1>
+          <button class="btn bar-right"><span class="glyphicon glyphicon-option-vertical"></span></button>
+        </header>
+
+        <div id="contact-book">
+          <div class="grid">
+            <div class="cell cell30" id="roster">
+              <button id="new-contact">Add a contact</button>
+              <input type="search" id="filter-contacts" placeholder="Search...">
+
+              <ul id="contact-list">
+
+              </ul>
             </div>
-            <div class="center sliding">Awesome App</div>
+
+            <div class="cell cell70">
+              <div id="contact-details"></div>
+            </div>
           </div>
         </div>
-        <div class="pages">
-          <div data-page="index" class="page">
-            <div class="page-content">
-              <p>Page content goes here</p>
-              <a href="about.html">About app</a>
-            </div>
+      </div>
+
+
+
+      <script type="text/template" id="contact-template" charset="utf-8">
+        <div class="grid">
+          <div class="cell cell50">
+            <input type="text" value="{{firstName}}" placeholder="First Name" class="contact-firstName">
+          </div>
+          <div class="cell cell50">
+            <input type="text" value="{{lastName}}" placeholder="Last Name" class="contact-lastName">
+          </div>
+          <div class="cell">
+            <input type="text" value="{{email}}" placeholder="Email" class="contact-email">
+          </div>
+          <div class="cell">
+            <input type="text" value="{{phone}}" placeholder="Phone number" class="contact-phone">
+          </div>
+          <div class="cell">
+            <button class="remove-contact">Remove</button>
           </div>
         </div>
-      </div>
-    </div>
-    <script src="js/framework7.min.js"></script>
-    <!--
-    We need the following script to include styles depending on device's OS
-    It is important to keep it as inline script or in separate JS file with this code only!
-    -->
-    <script>
-      (function () {
-        if (Framework7.prototype.device.android) {
-              Dom7('head').append(
-                  '<link rel="stylesheet" href="css/framework7.material.min.css">' +
-                  '<link rel="stylesheet" href="css/framework7.material.colors.min.css">' +
-                  '<link rel="stylesheet" href="css/my-app.material.css">'
-              );
-          }
-          else {
-              Dom7('head').append(
-                  '<link rel="stylesheet" href="css/framework7.ios.min.css">' +
-                  '<link rel="stylesheet" href="css/framework7.ios.colors.min.css">' +
-                  '<link rel="stylesheet" href="css/my-app.ios.css">'
-              );
-          }
-      })();
-    </script>
-    <script src="js/my-app.js"></script>
-  </body>
+      </script>
+
+        <script type="text/javascript" src="cordova.js"></script>
+        <script type="text/javascript" src="vendors/json2/json2.min.js"></script>
+        <script type="text/javascript" src="vendors/zepto/zepto.min.js"></script>
+        <script type="text/javascript" src="vendors/zepto/zepto.touch.js"></script>
+        <script type="text/javascript" src="vendors/handlebars/handlebars.min.js"></script>
+        <script type="text/javascript" src="vendors/underscore/underscore-min.js"></script>
+        <script type="text/javascript" src="vendors/backbone/backbone-min.js"></script>
+        <script type="text/javascript" src="vendors/backbone/backbone.localStorage-min.js"></script>
+
+        <script type="text/javascript" src="js/models/contact.js"></script>
+        <script type="text/javascript" src="js/collections/contact_book.js"></script>
+        <script type="text/javascript" src="js/views/contact_list_view.js"></script>
+        <script type="text/javascript" src="js/views/item_view.js"></script>
+        <script type="text/javascript" src="js/views/contact_view.js"></script>
+        <script type="text/javascript" src="js/views/app_view.js"></script>
+        <script type="text/javascript" src="js/routers/application_router.js"></script>
+
+<script charset="utf-8">
+ var app = app || {};
+ $(function($) {
+   app.Contacts = new app.ContactBook();
+   app.MainView = new app.AppView(app.Contacts);
+   app.Router   = new app.ApplicationRouter();
+   //Backbone.history.start({pushState: true});
+   Backbone.history.start();
+
+   $(document).on('click', '.bar .bar-left', function(){
+      $('body').addClass('open-left');
+      $(document).on('click', "#page", hideMenuLeft);
+   });
+   /*$(document).touch({
+     excludedElements:'button'
+   }).on('swipe', '#page', function(e, direction){
+      if(direction == 'right'){
+        $('body').addClass('open-left');
+        $(document).on('click', "#page", hideMenuLeft);
+      }
+      else if(direction == 'left'){
+        $('body').addClass('open-right');
+        $(document).on('click', "#page", hideMenuRight);
+      }
+   });*/
+
+   function hideMenuLeft(){
+     $('body').removeClass('open-left');
+     $(document).off('click', "#page", hideMenuLeft);
+   }
+
+   $(document).on('click', '.bar .bar-right', function(){
+      $('body').addClass('open-right');
+      $(document).on('click', "#page", hideMenuRight);
+   });
+
+   function hideMenuRight(){
+     $('body').removeClass('open-right');
+     $(document).off('click', "#page", hideMenuRight);
+   }
+
+
+ });
+</script>
+    </body>
 </html>
